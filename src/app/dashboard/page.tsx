@@ -171,14 +171,7 @@ export default function page() {
             </div>
            <Link href="/" className="text-center text-sm absolute lg:bottom-10 bottom-[-60px] left-0 right-0 cursor-pointer">log out</Link>
           </div>
-          <div className="absolute lg:bottom-10 bottom-[-60px] left-0 right-0 text-center">
-              <small className="text-gray-100">
-                Developed by{" "}
-                <Link href="https://toluojo.netlify.app/" target="_blank" className="text-sm font-light text-amber-700 bg-white p-1 rounded-md">
-                  Tolulope Ojo
-                </Link>
-              </small>
-            </div>
+         
         </div>
       )}
     </main>

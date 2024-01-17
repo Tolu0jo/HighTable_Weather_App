@@ -93,19 +93,7 @@ export default function page() {
           ) : (
             <Signin togglePage={togglePage} />
           )}
-        </div>
-        <div className="absolute lg:bottom-10 bottom-[-60px] left-0 right-0 text-center">
-          <small className="text-gray-100">
-            Developed by{" "}
-            <a
-              href="https://toluojo.netlify.app/"
-              target="_blank"
-              className="text-sm font-light text-amber-700 bg-white p-1 rounded-md"
-            >
-              Tolulope Ojo
-            </a>
-          </small>
-        </div>
+        </div>  
       </div>
     </main>
   );
