@@ -16,9 +16,12 @@ const Signup = ({togglePage}:any) => {
     
       };
   return (
-    <div className="bg-slate-200  w-1/4 rounded-lg flex flex-col justify-center items-center gap-4 h-screen">
-        <h1 className="mt-4">SIGN UP</h1>
-    <form onSubmit={handleSubmit} className="flex flex-col w-5/6 my-1">
+   < div className="my-4 p-2  text-white items-center ">
+     <p className="font-bold pb-2 text-center">Sign Up</p>
+     <hr />
+    <div className="my-3  flex flex-col gap-2">
+       
+    <form onSubmit={handleSubmit} className="flex flex-col">
        <label htmlFor="name">Enter name</label>
        <input
          className="h-10 px-2 bg-inherit border-b rounded-none border-gray-500"
@@ -56,7 +59,8 @@ const Signup = ({togglePage}:any) => {
          Enter
        </button>
      </form>
-     Already have an account?<span onClick ={togglePage}>sign in.</span>
+     <h1 className='text-center'>Already have an account ?<span className= "cursor-pointer"onClick ={togglePage}> sign in.</span></h1>
+    </div>
     </div>
   )
 }

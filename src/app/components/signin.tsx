@@ -16,33 +16,37 @@ const Signin = ({togglePage}:any) => {
     
       };
   return (
-    <div className="bg-slate-200  w-1/4 rounded-lg flex flex-col justify-center items-center gap-4 h-screen">
-        <h1 className="mt-4">SIGN IN</h1>
-    <form onSubmit={handleSubmit} className="flex flex-col w-5/6 my-1">
-    
-       <label htmlFor="email">Enter Email</label>
-       <input
-        className="h-10 px-2 bg-inherit border-b rounded-none border-gray-500"
-         type="email"
-         name="email"
-         onChange={handleChange}
-       />
-       <label htmlFor="password">Enter Password</label>
-       <input
-         className="h-10 px-2 bg-inherit  border-b rounded-none border-gray-500"
-         type="password"
-         name="password"
-         id=""
-         onChange={handleChange}
-       />
-       <button
-         type="submit"
-         className="bg-slate-500 rounded-xl w-1/3 mx-auto py-2 my-4"
-       >
-         Enter
-       </button>
-     </form>
-     New User? <span onClick ={togglePage}> kindly sign up.</span></div>
+    < div className="my-4 p-2 text-white items-center">
+    <p className="font-bold pb-2  items-center text-center">Sign In</p>
+    <hr />
+   <div className="my-3  justify-center flex flex-col gap-2">   
+   <form onSubmit={handleSubmit} className="flex flex-col ">
+      <label htmlFor="email">Enter Email</label>
+      <input
+       className="h-10 px-2 bg-inherit border-b rounded-none border-gray-500"
+        type="email"
+        name="email"
+        onChange={handleChange}
+      />
+      <label htmlFor="password">Enter Password</label>
+      <input
+        className="h-10 px-2 bg-inherit  border-b rounded-none border-gray-500"
+        type="password"
+        name="password"
+        id=""
+        onChange={handleChange}
+      />
+     
+      <button
+        type="submit"
+        className="bg-slate-500 rounded-xl w-1/3 mx-auto py-2 my-4"
+      >
+        Enter
+      </button>
+    </form>
+   <h1 className='text-center'>New User ?  <span className= "cursor-pointer" onClick ={togglePage}>sign up.</span></h1>
+   </div>
+   </div>
   )
 }
 
