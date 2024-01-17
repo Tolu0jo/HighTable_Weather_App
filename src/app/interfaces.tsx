@@ -56,3 +56,10 @@ export interface ISignIn{
     password: string
    
 }
+
+export interface IUser{
+    
+    email: string
+    hashedPassword: string
+   
+}
