@@ -1,6 +1,6 @@
 import { ISignIn, ISignUp, IUser } from "@/app/interfaces";
 import prisma from "../../../../prisma/client";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 export const resolvers = {
     Query: {
       users:async () =>{

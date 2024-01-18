@@ -6,6 +6,8 @@ import { useEffect, useState } from "react";
 import { ILocation, IWeather } from "../interfaces";
 import { styling1 } from "../common";
 import Link from "next/link";
+import { MdOutlineSaveAlt } from "react-icons/md";
+
 
 const recentSearch = [
   "Bangladesh",
@@ -17,7 +19,10 @@ const recentSearch = [
 ];
 
 export default function page() {
-  // ================= these are the state ===============
+
+const RECENT_SEARCH_KEY = "recentSearch";
+const MAX_RECENT_SEARCHES = 9;
+const [recentSearch, setRecentSearch] = useState<string[]>([]);
   const [searchedText, setSearchedText] = useState<string>("");
   const [weatherDetails, setWeatherDetails] = useState<IWeather>(
     {} as IWeather
@@ -26,18 +31,28 @@ export default function page() {
     {} as ILocation
   );
 
-  //==============input field value handler ===============
+
   const searchFieldInputHandler = (e: HTMLInputElement | any) => {
     e.preventDefault();
     setSearchedText(e.target.value);
   };
 
-  // initially its shows result for Bangladesh
+
+
+  useEffect(() => {
+ let parsedSearches:any;
+    const storedSearches = localStorage.getItem(RECENT_SEARCH_KEY);
+    if (storedSearches) {
+     parsedSearches = JSON.parse(storedSearches);
+      setRecentSearch(parsedSearches.slice(-MAX_RECENT_SEARCHES));
+    }
+
   const initial = async () => {
     try {
       const response = await axios.get(
-        `https://api.weatherapi.com/v1/current.json?key=25910174a87a4c63a6c141019230506&q=Bangladesh&aqi=no`
+        `https://api.weatherapi.com/v1/current.json?key=25910174a87a4c63a6c141019230506&q=Lagos&aqi=no`
       );
+      
       if (response.data) {
         setLocationDetails(response.data.location);
         setWeatherDetails(response.data.current);
@@ -47,12 +62,11 @@ export default function page() {
       console.log(error);
     }
   };
-
-  useEffect(() => {
     initial();
+
   }, []);
 
-  //============== on searched button click =================
+
   const search = async () => {
     try {
       const response = await axios.get(
@@ -63,13 +77,20 @@ export default function page() {
         setWeatherDetails(response.data.current);
 
         setSearchedText("");
+
+        setRecentSearch((prevSearches) => {
+          const updatedSearches = [...prevSearches, searchedText].slice(-MAX_RECENT_SEARCHES);
+          localStorage.setItem(RECENT_SEARCH_KEY, JSON.stringify(updatedSearches));
+          return updatedSearches;
+        });
       }
     } catch (error) {
       console.log(error);
     }
   };
 
-  //============== on search from recent search list =============
+
+ 
   const searchWith = async (name: string | any) => {
     try {
       const response = await axios.get(
@@ -92,7 +113,7 @@ export default function page() {
           className="flex lg:w-3/4 w-11/12 mx-auto rounded-tl-2xl lg:flex-row flex-col rounded-br-2xl"
           style={styling1}
         >
-          {/* *******weather details********* */}
+         
           <div className="lg:w-4/6 w-4/5 lg:relative bg-opacity-50 mx-auto lg:h-[560px] h-300px lg:p-0 p-3">
             <div className=" p-1 lg:my-7 my-4 ml-16">
               <Image
@@ -135,10 +156,12 @@ export default function page() {
                 </small>
               </div>
             </motion.div>
+            <></>
           </div>
 
           {/* *********** extra info ************* */}
           <div className="flex-grow bg-opacity-70 bg-slate-600 rounded-br-2xl p-4 relative  text-white">
+            
             <div className="w-full p-2 ">
               <input
                 value={searchedText}
@@ -159,13 +182,21 @@ export default function page() {
               <hr />
               <div className="my-3  flex flex-col gap-2">
                 {recentSearch.map((place: string) => (
-                  <p
-                    onClick={() => searchWith(`${place}`)}
-                    key={place}
-                    className="cursor-pointer text-gray-100 bg-gray-700 bg-opacity-40 px-3 py-1 rounded hover:bg-gray-200 hover:text-amber-700 hover:scale-105 duration-300"
-                  >
-                    {place}
-                  </p>
+                  <div className="cursor-pointer flex px-3 py-1 bg-gray-700 bg-opacity-50  h-8 justify-between">
+                    <p onClick={() => searchWith(`${place}`)}
+                        key={place}>
+                       {place}
+                    </p>
+                     <div className=" flex items-center ">
+                     <MdOutlineSaveAlt className="text-2xl" />
+                      </div>
+                  </div>
+                  // <p
+                
+                  //   className="cursor-pointer text-gray-100 bg-gray-700 bg-opacity-40 px-3 py-1 rounded hover:bg-gray-200 hover:text-amber-700 hover:scale-105 duration-300"
+                  // >
+                  //   {place}
+                  // </p>
                 ))}
               </div>
             </div>

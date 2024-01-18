@@ -15,4 +15,12 @@ model User{
   name           String?
   email          String?   @unique
   hashedPassword String?
+  cities         City[]
+}
+
+model City{
+  id             String    @id @default(cuid())
+  name            String?   @unique
+  userId         String
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
