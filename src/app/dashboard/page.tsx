@@ -8,6 +8,7 @@ import { styling1 } from "../common";
 import Link from "next/link";
 import { MdOutlineSaveAlt } from "react-icons/md";
 import { useSession,signOut } from "next-auth/react";
+import {useRouter} from"next/navigation"
 // import { ADD_CITY, GET_CITIES } from "../apolloclient/action";
 import { useQuery } from "@apollo/client";
 
@@ -25,7 +26,7 @@ export default function page() {
   // const { loading, error, data } = useQuery(GET_CITIES);
   // const [addCityToUser] = useMutation(ADD_CITY);
   const { data: session }:any = useSession();
-  
+  const router =useRouter();
 
 const RECENT_SEARCH_KEY = "recentSearch";
 const MAX_RECENT_SEARCHES = 8;
@@ -37,14 +38,16 @@ const [recentSearch, setRecentSearch] = useState<string[]>([]);
   const [locationDetails, setLocationDetails] = useState<ILocation>(
     {} as ILocation
   );
-
+  const [isCelsius, setIsCelsius] = useState(true);
 
   const searchFieldInputHandler = (e: HTMLInputElement | any) => {
     e.preventDefault();
     setSearchedText(e.target.value);
   };
 
-
+  const toggleUnit = () => {
+    setIsCelsius((prev) => !prev);
+  };
 
   useEffect(() => {
  let parsedSearches:any;
@@ -97,6 +100,7 @@ const [recentSearch, setRecentSearch] = useState<string[]>([]);
   };
   const handleLogout = async () => {
     await signOut();
+  router.push("/")
     localStorage.clear();
   };
 
@@ -130,7 +134,7 @@ const [recentSearch, setRecentSearch] = useState<string[]>([]);
                 src={`https:${weatherDetails?.condition?.icon}`}
                 width={120}
                 height={120}
-                alt="Picture of the author"
+                alt="Picture of the background"
               />
             </div>
 
@@ -138,12 +142,16 @@ const [recentSearch, setRecentSearch] = useState<string[]>([]);
               initial={{ opacity: 0, scale: 0.5 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5 }}
-              className="lg:absolute lg:bottom-10 lg:left-0 lg:right-0 text-center flex lg:flex-row flex-col lg:justify-center justify-between items-center lg:gap-10 gap-3"
+              className="lg:absolute lg:bottom-10 lg:left-0 lg:right-0 text-center flex lg:flex-row flex-col lg:justify-center justify-between mx-2 items-center lg:gap-10 gap-3"
             >
               <p className="lg:text-8xl text-5xl font-sans font-semibold text-gray-100 flex items-center">
-                {Math.round(weatherDetails.temp_c)}{" "}
+                {isCelsius?(<>{Math.round(weatherDetails.temp_c)}
                 <sup className="lg:text-5xl text-2xl">o </sup>
-                <span className="lg:text-7xl text-4xl"> C</span>
+                <span className="lg:text-7xl text-4xl"> C</span></>):
+                <>{(Math.round(weatherDetails.temp_f))}
+                <sup className="lg:text-5xl text-2xl">o </sup>
+                <span className="lg:text-7xl text-4xl"> F</span></>
+                }
               </p>
               <div className="lg:w-[30%] w-full">
                 <p className="lg:text-4xl text-xl text-gray-100">
@@ -162,14 +170,33 @@ const [recentSearch, setRecentSearch] = useState<string[]>([]);
                 </p>
                 <small className="flex flex-col">
                   <span>Humidity: {weatherDetails.humidity}%</span>
-                  <span>Wind:{weatherDetails.wind_kph} km/h</span>
+                 {isCelsius?<span>Wind:{weatherDetails.wind_kph} km/h</span>:
+                 <span>Wind:{weatherDetails.wind_mph} m/h</span>} 
                 </small>
+
               </div>
+              <div className="flex items-center">
+      <button
+        onClick={()=>{setIsCelsius(true)}}
+        className={`px-2 py-1 ${
+          isCelsius ? 'bg-blue-500' : 'bg-gray-500'
+        } text-white text-xs rounded-l-md focus:outline-none`}
+      >
+        Metric °C,km/h
+      </button>
+      <button
+        onClick={()=>{setIsCelsius(false)}}
+        className={`px-2 py-1 ${
+          !isCelsius ? 'bg-blue-500' : 'bg-gray-500'
+        } text-white text-xs rounded-r-md focus:outline-none`}
+      >
+        Imperial °F,m/h
+      </button>
+    </div>
             </motion.div>
-            <></>
+    
           </div>
 
-          {/* *********** extra info ************* */}
           <div className="flex-grow bg-opacity-70 bg-slate-600 rounded-br-2xl p-4 relative  text-white">
           {session && <p className="text-lg text-center">Welcome {session.user.name}</p>}
             <div className="w-full p-2 ">
@@ -203,9 +230,10 @@ const [recentSearch, setRecentSearch] = useState<string[]>([]);
                   </div>
                  
                 ))}
+
               </div>
             </div>
-           <Link href="/" className="text-center text-sm absolute lg:bottom-10 bottom-[-60px] left-0 right-0 cursor-pointer" onClick={handleLogout}>log out</Link>
+           <p className="text-center text-sm absolute lg:bottom-10 bottom-[-60px] left-0 right-0 cursor-pointer" onClick={handleLogout}>log out</p>
           </div>
          
         </div>

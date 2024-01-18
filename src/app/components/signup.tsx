@@ -27,7 +27,7 @@ const Signup = () => {
         await createUser({
             variables: form,
           }).then(()=>{
-            router.push("/signin")
+            router.push("/")
             setForm({
               name: "",
               email: "",
