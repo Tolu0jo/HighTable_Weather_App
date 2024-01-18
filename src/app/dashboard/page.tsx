@@ -8,7 +8,7 @@ import { styling1 } from "../common";
 import Link from "next/link";
 import { MdOutlineSaveAlt } from "react-icons/md";
 import { useSession,signOut } from "next-auth/react";
-import { ADD_CITY, GET_CITIES } from "../apolloclient/action";
+// import { ADD_CITY, GET_CITIES } from "../apolloclient/action";
 import { useQuery } from "@apollo/client";
 
 
