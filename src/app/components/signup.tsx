@@ -1,10 +1,15 @@
+"use client"
 import React, { useState } from 'react'
+import { SIGNUP_USER } from '../apolloclient/action';
+import { useMutation } from '@apollo/client';
 
 const Signup = ({togglePage}:any) => {
+  const [createUser] = useMutation(SIGNUP_USER);
     const [form, setForm] = useState({
         name: "",
         email: "",
         password: "",
+        confirmPassword: ""
       });
       const handleChange = (e: { target: { name: any; value: any } }) => {
         const { name, value } = e.target;
@@ -13,6 +18,16 @@ const Signup = ({togglePage}:any) => {
     
       const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        try {
+          console.log(form)
+        const result=  await createUser({
+            variables: form,
+          });
+        console.log(result.errors +`ewlhfgsfkhgjfnla`)
+        } catch (error) {
+          console.log(error+`error`)
+        }
+      
     
       };
   return (
@@ -44,12 +59,12 @@ const Signup = ({togglePage}:any) => {
          id=""
          onChange={handleChange}
        />
-       <label htmlFor="password">Confirm Password</label>
+       <label htmlFor="confirmPassword">Confirm Password</label>
        <input
          className="h-10 px-2 bg-inherit border-b rounded-none border-gray-500"
          type="password"
-         name="password"
-         id=""
+         name="confirmPassword"
+        
          onChange={handleChange}
        />
        <button

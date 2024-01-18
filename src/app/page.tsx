@@ -1,52 +1,8 @@
-// "use client"
-
-// import { useState } from 'react';
-// import Signin from './components/signin';
-// import Signup from './components/signup';
-// import { styling1 } from './common';
-
-// export default function Home() {
-// const [signIn,setSignIn]=useState(false);
-// const togglePage =()=>{
-//   setSignIn(!signIn)
-// }
-//   const [form, setForm] = useState({
-//     name: "",
-//     email: "",
-//     password: "",
-//   });
-//   const handleChange = (e: { target: { name: any; value: any } }) => {
-//     const { name, value } = e.target;
-//     setForm((prev) => ({ ...prev, [name]: value }));
-//   };
-
-//   const handleSubmit = async (e: React.FormEvent) => {
-//     e.preventDefault();
-
-//   };
-//   return (
-//     <main className='flex min-h-screen w-full flex-col items-center justify-center relative bg-gradient-to-tl bg-opacity-80 bg-blue-100 from-gray-500'>
-//       <div
-//           className="flex lg:w-3/4 w-11/12 mx-auto rounded-tl-2xl lg:flex-row flex-col rounded-br-2xl"
-//           style={styling1}
-//         >
-//       </div>
-
-//    {signIn ? <Signin togglePage={togglePage}/>:
-
-//    <Signup togglePage={togglePage}/>
-//    }
-
-//     </main>
-//   )
-// }
 "use client";
 import axios from "axios";
-import { motion } from "framer-motion";
-import Image from "next/image";
+
 import { useEffect, useState } from "react";
 import { styling1 } from "./common";
-import { ILocation, IWeather } from "./interfaces";
 import Signup from "./components/signup";
 import Signin from "./components/signin";
 
@@ -65,20 +21,7 @@ export default function page() {
     setSignIn(!signIn);
   };
 
-  // initially its shows result for Bangladesh
-  const initial = async () => {
-    try {
-      const response = await axios.get(
-        `https://api.weatherapi.com/v1/current.json?key=25910174a87a4c63a6c141019230506&q=Bangladesh&aqi=no`
-      );
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
-  useEffect(() => {
-    initial();
-  }, []);
 
   return (
     <main className="flex min-h-screen w-full flex-col items-center justify-center relative bg-gradient-to-tl bg-opacity-80 bg-blue-100 from-gray-500">
