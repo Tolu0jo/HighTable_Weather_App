@@ -7,3 +7,18 @@ export const SIGNUP_USER = gql`
     }
   }
 `;
+
+export const ADD_CITY = gql`
+mutation AddCity($name: String!, $email: String!){
+addcity(name: $name, email: $email){
+    name
+}
+}
+`;
+
+export const GET_CITIES = gql`
+query GetCities($email: String!){
+    getcities(email: $email) {
+    name
+}
+`;

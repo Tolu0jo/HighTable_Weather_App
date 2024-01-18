@@ -7,6 +7,9 @@ import { ILocation, IWeather } from "../interfaces";
 import { styling1 } from "../common";
 import Link from "next/link";
 import { MdOutlineSaveAlt } from "react-icons/md";
+import { useSession,signOut } from "next-auth/react";
+import { ADD_CITY, GET_CITIES } from "../apolloclient/action";
+import { useQuery } from "@apollo/client";
 
 
 const recentSearch = [
@@ -19,9 +22,13 @@ const recentSearch = [
 ];
 
 export default function page() {
+  // const { loading, error, data } = useQuery(GET_CITIES);
+  // const [addCityToUser] = useMutation(ADD_CITY);
+  const { data: session }:any = useSession();
+  
 
 const RECENT_SEARCH_KEY = "recentSearch";
-const MAX_RECENT_SEARCHES = 9;
+const MAX_RECENT_SEARCHES = 8;
 const [recentSearch, setRecentSearch] = useState<string[]>([]);
   const [searchedText, setSearchedText] = useState<string>("");
   const [weatherDetails, setWeatherDetails] = useState<IWeather>(
@@ -88,7 +95,10 @@ const [recentSearch, setRecentSearch] = useState<string[]>([]);
       console.log(error);
     }
   };
-
+  const handleLogout = async () => {
+    await signOut();
+    localStorage.clear();
+  };
 
  
   const searchWith = async (name: string | any) => {
@@ -161,7 +171,7 @@ const [recentSearch, setRecentSearch] = useState<string[]>([]);
 
           {/* *********** extra info ************* */}
           <div className="flex-grow bg-opacity-70 bg-slate-600 rounded-br-2xl p-4 relative  text-white">
-            
+          {session && <p className="text-lg text-center">Welcome {session.user.name}</p>}
             <div className="w-full p-2 ">
               <input
                 value={searchedText}
@@ -191,16 +201,11 @@ const [recentSearch, setRecentSearch] = useState<string[]>([]);
                      <MdOutlineSaveAlt className="text-2xl" />
                       </div>
                   </div>
-                  // <p
-                
-                  //   className="cursor-pointer text-gray-100 bg-gray-700 bg-opacity-40 px-3 py-1 rounded hover:bg-gray-200 hover:text-amber-700 hover:scale-105 duration-300"
-                  // >
-                  //   {place}
-                  // </p>
+                 
                 ))}
               </div>
             </div>
-           <Link href="/" className="text-center text-sm absolute lg:bottom-10 bottom-[-60px] left-0 right-0 cursor-pointer">log out</Link>
+           <Link href="/" className="text-center text-sm absolute lg:bottom-10 bottom-[-60px] left-0 right-0 cursor-pointer" onClick={handleLogout}>log out</Link>
           </div>
          
         </div>

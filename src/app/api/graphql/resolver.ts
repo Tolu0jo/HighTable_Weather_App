@@ -6,6 +6,16 @@ export const resolvers = {
       users:async () =>{
        return await prisma.user.findMany()
       },
+      getcities:async (_:unknown,{email}:{email:string})=>{
+        const user =await prisma.user.findUnique({where:{
+            email,
+        }})
+        return await prisma.city.findMany({
+            where:{
+                userId:user?.id
+            }
+        })
+      }
     },
     Mutation: {
      signup: async (_:unknown, { name,email, password,confirmPassword }:ISignUp) => {
@@ -46,5 +56,23 @@ export const resolvers = {
             throw new Error(`${error}`)
          }
       },
+      addcity:async (_:unknown,{name , email}:{name:string,email:string})=>{
+        const existingUser =await prisma.user.findUnique({where:{
+            email,
+        }}) as unknown as any;
+      const existingCity= await prisma.city.findFirst({
+        where:{
+            name,
+            userId: existingUser.id
+        }
+      })
+      if(existingCity) throw new Error("city already exists")
+        const newCity =await prisma.city.create({
+            data:{
+                name,
+                userId:existingUser.id
+            }
+        });
+      }
     },
   };
