@@ -121,7 +121,7 @@ const [recentSearch, setRecentSearch] = useState<string[]>([]);
   };
 
   return (
-    <main className="flex min-h-screen w-full flex-col items-center justify-center relative bg-gradient-to-tl bg-opacity-80 bg-blue-100 from-gray-500">
+    <main className="flex min-h-screen w-full flex-col items-center justify-center relative bg-gradient-to-tl bg-opacity-80 bg-blue-100  from-blue-400">
       {weatherDetails?.condition && (
         <div
           className="flex lg:w-3/4 w-11/12 mx-auto rounded-tl-2xl lg:flex-row flex-col rounded-br-2xl"
