@@ -16,13 +16,6 @@ const recentSearch = [
 ];
 
 export default function page() {
-  const [signIn, setSignIn] = useState(false);
-  const togglePage = () => {
-    setSignIn(!signIn);
-  };
-
-
-
   return (
     <main className="flex min-h-screen w-full flex-col items-center justify-center relative bg-gradient-to-tl bg-opacity-80 bg-blue-100 from-gray-500">
       <div
@@ -31,12 +24,8 @@ export default function page() {
       >
         <div className="lg:w-4/6 w-4/5 lg:relative bg-opacity-50 mx-auto lg:h-[560px] h-300px lg:p-0 p-3"></div>
         <div className="flex-grow bg-opacity-90 bg-slate-600 rounded-br-2xl p-4 relative">
-          {signIn ? (
-            <Signup togglePage={togglePage} />
-          ) : (
-            <Signin togglePage={togglePage} />
-          )}
-        </div>  
+          <Signin />
+        </div>
       </div>
     </main>
   );

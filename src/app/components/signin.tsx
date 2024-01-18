@@ -1,8 +1,15 @@
+"use client"
 import React, { useState } from 'react'
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { signIn } from 'next-auth/react';
 
-const Signin = ({togglePage}:any) => {
+
+
+const Signin = () => {
+  const router = useRouter()
     const [form, setForm] = useState({
-        name: "",
+       
         email: "",
         password: "",
       });
@@ -12,7 +19,28 @@ const Signin = ({togglePage}:any) => {
       };
     
       const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
+        try {
+          e.preventDefault();
+          const {email, password} = form
+          console.log(form)
+       await signIn('credentials', {
+            redirect: false,
+            email,
+            password,
+          }).then(() => {
+            router.push("/dashboard");
+            setForm({
+              email: "",
+              password: "",
+            });
+          });
+       
+      
+        
+        } catch (error) {
+          console.log(error)
+        }
+    
     
       };
   return (
@@ -26,6 +54,8 @@ const Signin = ({togglePage}:any) => {
        className="h-10 px-2 bg-inherit border-b rounded-none border-gray-500"
         type="email"
         name="email"
+        autoComplete="email"
+        id="email"
         onChange={handleChange}
       />
       <label htmlFor="password">Enter Password</label>
@@ -33,7 +63,7 @@ const Signin = ({togglePage}:any) => {
         className="h-10 px-2 bg-inherit  border-b rounded-none border-gray-500"
         type="password"
         name="password"
-        id=""
+        id="password"
         onChange={handleChange}
       />
      
@@ -44,7 +74,7 @@ const Signin = ({togglePage}:any) => {
         Enter
       </button>
     </form>
-   <h1 className='text-center'>New User ?  <span className= "cursor-pointer" onClick ={togglePage}>sign up.</span></h1>
+   <h1 className='text-center'>New User ?  <Link href="/signup" className= "cursor-pointer" >sign up.</Link></h1>
    </div>
    </div>
   )

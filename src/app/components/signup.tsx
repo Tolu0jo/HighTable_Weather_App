@@ -2,8 +2,9 @@
 import React, { useState } from 'react'
 import { SIGNUP_USER } from '../apolloclient/action';
 import { useMutation } from '@apollo/client';
+import Link from 'next/link';
 
-const Signup = ({togglePage}:any) => {
+const Signup = () => {
   const [createUser] = useMutation(SIGNUP_USER);
     const [form, setForm] = useState({
         name: "",
@@ -27,7 +28,7 @@ const Signup = ({togglePage}:any) => {
         } catch (error) {
           console.log(error+`error`)
         }
-      
+    
     
       };
   return (
@@ -49,6 +50,7 @@ const Signup = ({togglePage}:any) => {
         className="h-10 px-2 bg-inherit border-b rounded-none border-gray-500"
          type="email"
          name="email"
+         autoComplete="email"
          onChange={handleChange}
        />
        <label htmlFor="password">Enter Password</label>
@@ -74,7 +76,7 @@ const Signup = ({togglePage}:any) => {
          Enter
        </button>
      </form>
-     <h1 className='text-center'>Already have an account ?<span className= "cursor-pointer"onClick ={togglePage}> sign in.</span></h1>
+     <h1 className='text-center'>Already have an account ?<Link href="/" className= "cursor-pointer"> sign in.</Link></h1>
     </div>
     </div>
   )
