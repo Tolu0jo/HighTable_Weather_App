@@ -5,26 +5,17 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { ILocation, IWeather } from "../interfaces";
 import { styling1 } from "../common";
-import Link from "next/link";
+
 import { MdOutlineSaveAlt } from "react-icons/md";
 import { useSession,signOut } from "next-auth/react";
 import {useRouter} from"next/navigation"
-// import { ADD_CITY, GET_CITIES } from "../apolloclient/action";
+
 import { useQuery } from "@apollo/client";
 
 
-const recentSearch = [
-  "Bangladesh",
-  "Italy",
-  "France",
-  "Turkey",
-  "India",
-  "Dubai",
-];
 
 export default function page() {
-  // const { loading, error, data } = useQuery(GET_CITIES);
-  // const [addCityToUser] = useMutation(ADD_CITY);
+
   const { data: session }:any = useSession();
   const router =useRouter();
 

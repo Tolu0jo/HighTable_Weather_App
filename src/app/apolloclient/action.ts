@@ -16,9 +16,4 @@ addcity(name: $name, email: $email){
 }
 `;
 
-// export const GET_CITIES = gql`
-// query GetCities($email: String!){
-//     getcities(email: $email) {
-//     name
-// }
-// `;
+
