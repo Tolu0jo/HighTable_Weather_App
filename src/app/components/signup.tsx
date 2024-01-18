@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 
 const Signup = () => {
   const [createUser] = useMutation(SIGNUP_USER);
+  const router = useRouter();
   const [errorMessage, setErrorMessage]= useState("");
     const [form, setForm] = useState({
         name: "",
@@ -22,7 +23,7 @@ const Signup = () => {
       const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-          const router = useRouter();
+          
         await createUser({
             variables: form,
           }).then(()=>{
@@ -37,9 +38,9 @@ const Signup = () => {
             )
           });
     
-        } catch (error:any) {
+        } catch (error) {
           console.log(error+`error`)
-         setErrorMessage(error)
+        
         }
     
     
