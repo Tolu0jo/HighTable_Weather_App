@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import { SIGNUP_USER } from '../apolloclient/action';
 import { useMutation } from '@apollo/client';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 const Signup = () => {
   const [createUser] = useMutation(SIGNUP_USER);
@@ -20,11 +21,13 @@ const Signup = () => {
       const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-          console.log(form)
-        const result=  await createUser({
+          const router = useRouter();
+        await createUser({
             variables: form,
+          }).then(()=>{
+            router.push("/signin")
           });
-        console.log(result.errors +`ewlhfgsfkhgjfnla`)
+    
         } catch (error) {
           console.log(error+`error`)
         }
@@ -50,7 +53,7 @@ const Signup = () => {
         className="h-10 px-2 bg-inherit border-b rounded-none border-gray-500"
          type="email"
          name="email"
-         autoComplete="email"
+          autoComplete="email"
          onChange={handleChange}
        />
        <label htmlFor="password">Enter Password</label>
