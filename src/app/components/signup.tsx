@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 
 const Signup = () => {
   const [createUser] = useMutation(SIGNUP_USER);
+  const [errorMessage, setErrorMessage]= useState("");
     const [form, setForm] = useState({
         name: "",
         email: "",
@@ -26,10 +27,19 @@ const Signup = () => {
             variables: form,
           }).then(()=>{
             router.push("/signin")
+            setForm({
+              name: "",
+              email: "",
+              password: "",
+              confirmPassword: ""
+            }
+
+            )
           });
     
-        } catch (error) {
+        } catch (error:any) {
           console.log(error+`error`)
+         setErrorMessage(error)
         }
     
     
