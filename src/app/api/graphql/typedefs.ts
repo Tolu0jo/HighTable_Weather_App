@@ -18,5 +18,6 @@ export const typeDefs = `#graphql
     signup(name: String!,email:String!,password: String!,confirmPassword:String!): User
     signin(email: String!, password: String!): User
     addcity(name: String!, email: String!):City
+    deletecity(name: String!, email: String):String!
   }
 `;

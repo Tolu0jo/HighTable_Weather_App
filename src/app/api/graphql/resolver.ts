@@ -57,22 +57,53 @@ export const resolvers = {
          }
       },
       addcity:async (_:unknown,{name , email}:{name:string,email:string})=>{
-        const existingUser =await prisma.user.findUnique({where:{
-            email,
-        }}) as unknown as any;
-      const existingCity= await prisma.city.findFirst({
-        where:{
+        try {
+            const existingUser =await prisma.user.findUnique({where:{
+                email,
+            }}) as unknown as any;
+          const existingCity= await prisma.city.findFirst({
+            where:{
+                name,
+                userId: existingUser.id
+            }
+          })
+          if(existingCity) throw new Error("City already exists")
+
+          const cities = await prisma.city.findMany({
+            where:{
+                userId: existingUser.id
+            }
+          })
+
+          if(cities.length > 6 ) throw new Error("You can not save more than seven(7) cities")
+            const newCity =await prisma.city.create({
+                data:{
+                    name,
+                    userId:existingUser.id
+                }
+            });
+        } catch (error) {
+            throw new Error(`${error}`) 
+        }
+        
+      },
+      deletecity:async(_:unknown,{name , email}:{name:string,email:string})=>{
+        try {
+            const existingUser =await prisma.user.findUnique({where:{
+                email,
+            }}) as unknown as any;
+          
+            const deleteCity= await prisma.city.delete({where:{
             name,
             userId: existingUser.id
+    
+           
+         }})
+         return "success"
+        
+        } catch (error) {
+            throw new Error(`${error}`) 
         }
-      })
-      if(existingCity) throw new Error("city already exists")
-        const newCity =await prisma.city.create({
-            data:{
-                name,
-                userId:existingUser.id
-            }
-        });
-      }
-    },
+    }
+}
   };

@@ -15,6 +15,14 @@ addcity(name: $name, email: $email){
 }
 }
 `;
+
+export const DELETE_CITY=gql`
+mutation DeleteCity($name: String!, $email: String!) {
+    deletecity(name: $name, email: $email)
+  }
+
+`
+
 export const GET_CITIES= gql`
 query GetCities($email: String){
     getcities(email: $email){
@@ -22,5 +30,6 @@ query GetCities($email: String){
     }
 }
 `
+
 
 

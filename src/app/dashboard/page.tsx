@@ -5,28 +5,35 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { ILocation, IWeather } from "../interfaces";
 import { styling1 } from "../common";
-
-import { MdOutlineBookmarkAdded, MdOutlineSaveAlt } from "react-icons/md";
+import { getSession, withPageAuthRequired } from '@auth0/nextjs-auth0';
+import { GetServerSideProps, NextPage } from 'next';
+import { MdDeleteOutline, MdOutlineSaveAlt } from "react-icons/md";
 import { useSession, signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
 import { useMutation, useQuery } from "@apollo/client";
-import { ADD_CITY, GET_CITIES } from "../apolloclient/action";
+import { ADD_CITY, DELETE_CITY, GET_CITIES } from "../apolloclient/action";
 
-export default function page() {
-  const { data: session }: any = useSession();
+
+const page =()=> {
+
+  
+  const { data: session,status }: any = useSession();
   const router = useRouter();
-  const [errorMessage, setErrorMessage]= useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const { loading, error, data, refetch } = useQuery(GET_CITIES, {
     variables: { email: session?.user?.email },
   });
 
 
+  // if (status === 'loading' || !session) {
+  //   return null;
+  // }
 
   const MAX_RECENT_SEARCHES = 8;
   const [searchedText, setSearchedText] = useState<string>("");
-  const [lastSearch,setLastSearch]= useState<string>("");
+  const [lastSearch, setLastSearch] = useState<string>("");
   const [weatherDetails, setWeatherDetails] = useState<IWeather>(
     {} as IWeather
   );
@@ -39,54 +46,77 @@ export default function page() {
     e.preventDefault();
     setSearchedText(e.target.value);
   };
-  const [addcity] = useMutation(ADD_CITY,{
+  const [addcity] = useMutation(ADD_CITY, {
     onCompleted: async () => {
-    
       await refetch();
     },
   });
 
+  const [deletecity] = useMutation(DELETE_CITY, {
+    onCompleted: async () => {
+      await refetch();
+    },
+  });
+
+  const handleDeleteCity = async (name: string) => {
+    try {
+      await deletecity({
+        variables: { name, email: session?.user?.email },
+      });
+    } catch (error) {
+      if (error instanceof Error) {
+        setErrorMessage(error.message);
+        setTimeout(() => {
+          setErrorMessage("");
+        }, 2000);
+      }
+    }
+  };
+
   const handleAddCity = async (name: string) => {
     try {
       await addcity({
-        variables: { name,email: session?.user?.email },
+        variables: { name, email: session?.user?.email },
       });
-    
-      console.log(name +"added")
+      setLastSearch("");
     } catch (error) {
+      setLastSearch("");
       if (error instanceof Error) {
-        setErrorMessage(error.message)
-        setTimeout(async () => {
-          setErrorMessage("")
-         },1000
-         )
-        }
-     
+        setErrorMessage(error.message);
+        setTimeout(() => {
+          setErrorMessage("");
+        }, 3000);
+      }
     }
- 
+  };
+  const initial = async () => {
+    try {
+      const response = await axios.get(
+        `https://api.weatherapi.com/v1/current.json?key=25910174a87a4c63a6c141019230506&q=Lagos&aqi=no`
+      );
 
+      if (response.data) {
+        setLocationDetails(response.data.location);
+        setWeatherDetails(response.data.current);
+        setSearchedText("");
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
-   
 
-    const initial = async () => {
-      try {
-        const response = await axios.get(
-          `https://api.weatherapi.com/v1/current.json?key=25910174a87a4c63a6c141019230506&q=Lagos&aqi=no`
-        );
-
-        if (response.data) {
-          setLocationDetails(response.data.location);
-          setWeatherDetails(response.data.current);
-          setSearchedText("");
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    };
+    if (status === 'loading' || !session) {
+      router.push('/');
+    }
     initial();
-  }, []);
+  }, [session, status, router])
+
+ 
+  if (status === 'loading' || !session) {
+    return null 
+  }
 
   const search = async () => {
     try {
@@ -96,10 +126,8 @@ export default function page() {
       if (response.data) {
         setLocationDetails(response.data.location);
         setWeatherDetails(response.data.current);
-        setLastSearch(searchedText)
+        setLastSearch(searchedText);
         setSearchedText("");
-      
-     
       }
     } catch (error) {
       console.log(error);
@@ -233,38 +261,45 @@ export default function page() {
               </button>
             </div>
             <div className="my-4 p-2">
-            {errorMessage && (
-  <div className="text-red-500 text-center">{errorMessage}</div>
-)}
-  
+              {errorMessage && (
+                <div className="text-red-500 text-sm text-center">
+                  {errorMessage}
+                </div>
+              )}
+
               <p className="font-light text-white">Recent search</p>
               <hr />
               <div className="my-3  flex flex-col gap-2">
-                {lastSearch && 
+                {lastSearch && (
                   <div className="cursor-pointer flex px-3 py-1 bg-gray-700 bg-opacity-50  h-8 justify-between">
-                    <p>
-                      {lastSearch}
-                    </p>
+                    <p>{lastSearch}</p>
                     <MdOutlineSaveAlt
-                        onClick={()=>{handleAddCity(lastSearch)}}
-                        className="text-2xl"
-                      />
-                    </div>
-                }
-                            {data &&
+                      onClick={() => {
+                        handleAddCity(lastSearch);
+                      }}
+                      className="text-2xl"
+                    />
+                  </div>
+                )}
+                {data &&
                   data.getcities.map((city: any) => (
                     <div className="cursor-pointer flex px-3 py-1 bg-gray-700 bg-opacity-50  h-8 justify-between">
-                    <p key={city.name}  onClick={() => searchWith(`${city.name}`)} >{city.name}</p>
-                    <div className=" flex items-center ">
-                      <MdOutlineSaveAlt
-                        onClick={()=>{handleAddCity(city.name)}}
-                        className="text-2xl"
-                      />
+                      <p
+                        key={city.name}
+                        onClick={() => searchWith(`${city.name}`)}
+                      >
+                        {city.name}
+                      </p>
+                      <div className=" flex items-center ">
+                        <MdDeleteOutline
+                          onClick={() => {
+                            handleDeleteCity(city.name);
+                          }}
+                          className="text-2xl text-red-500"
+                        />
+                      </div>
                     </div>
-                 </div>
-
                   ))}
-             
               </div>
             </div>
             <p
@@ -279,3 +314,5 @@ export default function page() {
     </main>
   );
 }
+
+export default page;
