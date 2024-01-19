@@ -11,7 +11,7 @@ export const typeDefs = `#graphql
   }
   type Query {
     users: [User]
-    getcities(email: String!):[City]
+    getcities(email: String):[City]
   }
 
   type Mutation {

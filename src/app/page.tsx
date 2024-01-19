@@ -1,9 +1,7 @@
 "use client";
-import axios from "axios";
 
-import { useEffect, useState } from "react";
 import { styling1 } from "./common";
-import Signup from "./components/signup";
+
 import Signin from "./components/signin";
 
 

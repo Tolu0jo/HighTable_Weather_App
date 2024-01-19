@@ -39,7 +39,13 @@ const Signup = () => {
           });
     
         } catch (error) {
+
           console.log(error+`error`)
+          if (error instanceof Error) {
+            setErrorMessage(error.message); 
+          } else {
+            setErrorMessage("An unknown error occurred."); 
+          }
         
         }
     
@@ -92,6 +98,9 @@ const Signup = () => {
      </form>
      <h1 className='text-center'>Already have an account ?<Link href="/" className= "cursor-pointer"> sign in.</Link></h1>
     </div>
+    {errorMessage && (
+  <div className="text-red-500 text-center">{errorMessage}</div>
+)}
     </div>
   )
 }

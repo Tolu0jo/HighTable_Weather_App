@@ -6,6 +6,7 @@ import { signIn } from "next-auth/react";
 
 const Signin = () => {
   const router = useRouter();
+  const [errorMessage, setErrorMessage]= useState("");
   const [form, setForm] = useState({
     email: "",
     password: "",
@@ -19,7 +20,7 @@ const Signin = () => {
     try {
       e.preventDefault();
       const { email, password } = form;
-      console.log(form);
+  
       await signIn("credentials", {
         redirect: false,
         email,
@@ -33,6 +34,12 @@ const Signin = () => {
       });
     } catch (error) {
       console.log(error);
+      if (error instanceof Error) {
+        setErrorMessage(error.message); 
+      } else {
+        setErrorMessage("An unknown error occurred."); 
+      }
+    
     }
   };
   return (
@@ -73,6 +80,10 @@ const Signin = () => {
           </Link>
         </h1>
       </div>
+      {errorMessage && (
+  <div className="text-red-500 text-center">{errorMessage}</div>
+)}
+    
     </div>
   );
 };
