@@ -27,11 +27,6 @@ const page =()=> {
   });
 
 
-  // if (status === 'loading' || !session) {
-  //   return null;
-  // }
-
-  const MAX_RECENT_SEARCHES = 8;
   const [searchedText, setSearchedText] = useState<string>("");
   const [lastSearch, setLastSearch] = useState<string>("");
   const [weatherDetails, setWeatherDetails] = useState<IWeather>(

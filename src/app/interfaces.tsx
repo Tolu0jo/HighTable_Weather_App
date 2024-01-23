@@ -43,6 +43,27 @@ export interface IWeather {
 
 }
 
+
+export interface WeatherDisplayProps {
+    weatherDetails: {
+      condition: {
+        icon: string;
+        text: string;
+      };
+      temp_c: number;
+      temp_f: number;
+      humidity: number;
+      wind_kph: number;
+      wind_mph: number;
+    };
+    locationDetails: {
+      country: string;
+      name: string;
+      localtime: string;
+    };
+    isCelsius: boolean;
+  }
+  
 export interface ISignUp{
     name: string
     email: string

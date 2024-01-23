@@ -23,6 +23,7 @@ const Signin = () => {
   
       await signIn("credentials", {
         redirect: false,
+        refresh:false,
         email,
         password,
       }).then(() => {

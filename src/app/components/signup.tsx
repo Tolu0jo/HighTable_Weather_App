@@ -42,7 +42,15 @@ const Signup = () => {
 
           console.log(error+`error`)
           if (error instanceof Error) {
-            setErrorMessage(error.message); 
+            setErrorMessage(error.message);
+            setForm({
+              name: "",
+              email: "",
+              password: "",
+              confirmPassword: ""
+            }
+
+            ) 
           } else {
             setErrorMessage("An unknown error occurred."); 
           }
